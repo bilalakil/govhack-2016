@@ -1,11 +1,17 @@
 import React from 'react';
 
 import GoogleMap from '../components/GoogleMap';
+import {animalColors} from '../helpers';
 
 const SingleAnimal = (props) => {
+    const contentStyle = {backgroundImage: "url('//placehold.it/600x600')"},
+        colorStyle = {backgroundColor: animalColors[props.colorIndex]};
+
     return (
         <div className="singleAnimal">
-            <img src="//placehold.it/600x600" />
+            <div style={contentStyle} className="content"></div>
+            <div className="colorBar" style={colorStyle}></div>
+            {props.seen ? <div className="seenIcon"><i className="eye icon"></i></div> : null}
         </div>
     )
 };
@@ -13,8 +19,10 @@ const SingleAnimal = (props) => {
 const AnimalGallery = React.createClass({
     render() {
         return (
-            <div id="animalGallery">
-                {this.props.animals.map((val, index) => <SingleAnimal key={index} />)}
+            <div id="animalGallery" className="boxFooter">
+                {this.props.animals.map((val, index) => <SingleAnimal key={index} colorIndex={index} seen={true} />)}
+                <a href="#" className="arrow left" onClick={this.props.viewPrevious}><i className="angle left icon"></i></a>
+                <a href="#" className="arrow right" onClick={this.props.viewNext}><i className="angle right icon"></i></a>
             </div>
         )
     }
@@ -24,8 +32,6 @@ export default class MainView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {loading: true};
-        this.viewNextAnimals = this.viewNextAnimals.bind(this);
-        this.viewPreviousAnimals = this.viewPreviousAnimals.bind(this);
     }
 
     componentWillMount() {
@@ -34,8 +40,8 @@ export default class MainView extends React.Component {
 
         const testArr = [];
 
-        for (let i = 0; i < 100; i++) {
-            testArr.push([]);
+        for (let i = 0; i < 22; i++) {
+            testArr.push(i + 1);
         }
 
         /*HTTP.call('GET',
@@ -48,10 +54,12 @@ export default class MainView extends React.Component {
          this.setState({loading: false, animalStartingIndex: 0, allAnimals: JSON.parse(res.data)})
          }
          });*/
-        this.setState({loading: false, animalStartingIndex: 0, allAnimals: testArr})
+        this.setState({loading: false, animalStartingIndex: 0, allAnimals: testArr});
+        this.getCurrentAnimals();
     }
 
-    viewNextAnimals() {
+    viewNextAnimals(evt) {
+        evt.preventDefault();
         const allAnimals = this.state.allAnimals,
             currentIndex = this.state.animalStartingIndex;
 
@@ -63,15 +71,16 @@ export default class MainView extends React.Component {
         if (newIndex > allAnimals.length - 1) {
             //wrap around to start
             newIndex = 0;
-        } else if (allAnimals.length - 5 < newIndex) {
-            // show the last 4 animals
-            newIndex = allAnimals.length - 5;
+        } else if (newIndex > allAnimals.length - 4) {
+            newIndex = allAnimals.length - 4;
         }
 
         this.setState({animalStartingIndex: newIndex});
+        this.getCurrentAnimals();
     }
 
-    viewPreviousAnimals() {
+    viewPreviousAnimals(evt) {
+        evt.preventDefault();
         const allAnimals = this.state.allAnimals,
             currentIndex = this.state.animalStartingIndex;
 
@@ -82,18 +91,19 @@ export default class MainView extends React.Component {
 
         if (newIndex < -3) {
             //wrap around the other side
-            newIndex = allAnimals.length - 5;
+            newIndex = allAnimals.length - 4;
         } else if (newIndex < 0) {
             newIndex = 0;
         }
         this.setState({animalStartingIndex: newIndex});
+        this.getCurrentAnimals();
     }
 
     getCurrentAnimals() {
         const index = this.state.animalStartingIndex,
             animals = this.state.allAnimals.slice(index, index + 4);
         console.log(animals);
-        return animals;
+        this.setState({currentAnimals: animals});
     }
 
     render() {
@@ -108,11 +118,13 @@ export default class MainView extends React.Component {
         return (
             <div className="boxContent box">
                 <div className="boxContent googleMap">
-                    <GoogleMap />
+                    <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude}/>
                 </div>
-                <div className="boxFooter">
-                    {(this.state.allAnimals ? <AnimalGallery animals={this.getCurrentAnimals()} /> : null)}
-                </div>
+                {(this.state.currentAnimals ? <AnimalGallery
+                    animals={this.state.currentAnimals}
+                    viewNext={this.viewNextAnimals.bind(this)}
+                    viewPrevious={this.viewPreviousAnimals.bind(this)}
+                /> : null)}
             </div>
         )
     }

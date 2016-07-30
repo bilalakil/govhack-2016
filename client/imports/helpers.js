@@ -1,0 +1,1 @@
+export const animalColors = ['#db2828', '#21ba45', '#6435c9', '#f2711c'];

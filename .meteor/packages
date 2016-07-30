@@ -20,3 +20,6 @@ semantic:ui
 juliancwirko:postcss
 less@2.7.4
 http@1.2.8
+kadira:dochead
+meteorhacks:inject-initial
+accounts-password

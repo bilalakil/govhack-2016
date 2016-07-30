@@ -45,9 +45,9 @@ html, body, #react-root {
 }
 
 .boxFooter {
-  -ms-flex: 0 1 auto;
-  -webkit-flex: 0 1 auto;
-  flex: 0 1 auto;
+  -ms-flex: 0 1 90px;
+  -webkit-flex: 0 1 90px;
+  flex: 0 1 90px;
 }
 
 #brandHeader, #brandHeader.active, #homeHeader {
@@ -82,18 +82,53 @@ html, body, #react-root {
 .googleMap {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 #animalGallery {
   display: flex;
   flex-direction: row;
+  position: relative;
 
   .singleAnimal {
-    flex-grow: 0.25;
+    flex: 0.25;
+    position: relative;
 
-    img {
-      width: 100%;
+    .content {
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
+      width: 100%;
+      background-size: cover;
+    }
+
+    .colorBar {
+      position: absolute;
+      width: 100%;
+      height: 15px;
+      top: 0;
+    }
+
+    .seenIcon {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      font-size: 16px;
+    }
+  }
+
+  .arrow {
+    position: absolute;
+    bottom: 33%;
+    font-size: 24px;
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
     }
   }
 }

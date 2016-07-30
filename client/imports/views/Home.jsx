@@ -2,6 +2,8 @@ import React from 'react';
 
 import MainView from './MainView';
 
+//console.log(Injected.rawHead('viewport'));
+
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +19,7 @@ class Header extends React.Component {
         const sidebarStyle = {marginRight: 0};
 
         return (
-            <div className="boxHeader">
+            <div className="boxHeader" id="mobileNav">
                 <div className="ui inverted menu">
                     <div id="brandHeader" className="header item">GaiaXplorers</div>
                     <div id="rightNav" className="right menu">
