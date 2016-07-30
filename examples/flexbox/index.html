@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .flex-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background: blue;
+        padding: 20px;
+      }
+      .flex-container > section > .flex-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      header {
+        flex-basis: auto;
+
+        background: red;
+      }
+      section {
+        position: relative;
+        flex-grow: 1;
+
+        background: yellow;
+      }
+      footer {
+        flex-basis: auto;
+
+        background: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex-container">
+      <header>
+        TWO
+      </header>
+
+      <section>
+        <div class="flex-container">
+          <section>
+          </section>
+
+          <footer>
+            THREE
+          </footer>
+        </div>
+      </section>
+
+      <footer>
+        ONE
+      </footer>
+    </div>
+  </body>
+</html>
