@@ -1,3 +1,3 @@
-[submodule "packages/flow-routing"]
-	path = packages/flow-routing
+[submodule "meteor/packages/flow-routing"]
+	path = meteor/packages/flow-routing
 	url = https://github.com/ckiely91/flow-routing
