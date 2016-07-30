@@ -1,0 +1,31 @@
+{
+  "body-json": {},
+  "params": {
+    "querystring": {
+      "latitude": "-33.90865",
+      "longitude": "151.110097"
+    },
+    "header": {}
+  },
+  "stage-variables": {},
+  "context": {
+    "account-id": "1",
+    "api-id": "1",
+    "api-key": "test-invoke-api-key",
+    "authorizer-principal-id": "",
+    "caller": "1",
+    "cognito-authentication-provider": "",
+    "cognito-authentication-type": "",
+    "cognito-identity-id": "",
+    "cognito-identity-pool-id": "",
+    "http-method": "GET",
+    "stage": "test-invoke-stage",
+    "source-ip": "test-invoke-source-ip",
+    "user": "1",
+    "user-agent": "Apache-HttpClient/4.3.4 (java 1.5)",
+    "user-arn": "arn:aws:iam::1:root",
+    "request-id": "test-invoke-request",
+    "resource-id": "1",
+    "resource-path": "/image/{id}"
+  }
+}
