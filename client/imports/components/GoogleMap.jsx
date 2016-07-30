@@ -57,25 +57,16 @@ export default class GoogleMap extends React.Component {
         const setSingleMarker = (color, lat, long) => {
             lat = parseFloat(lat);
             long = parseFloat(long);
-            const latlong = new this.maps.LatLng(lat, long);
 
             for (let i = 0; i < this.markers.length; i++) {
-                console.log(this.markers[i].position.lat(), lat);
-                console.log(this.markers[i]);
-                console.log(this.markers[i].position.lng(), long);
-
-
                 if (this.markers[i].position.lat() === lat && this.markers[i].position.lng() === long) {
-                    console.log('collish');
-                    lat = lat - 0.0015 + Math.random() * 0.03;
-                    long = long - 0.0015 + Math.random() * 0.03;
-                    break;
+                    console.log('collision');
+                    lat = lat - 0.0005 + Math.random() * 0.0015;
+                    long = long - 0.0005 + Math.random() * 0.0015;
                 }
             }
 
-            console.log('Setting marker at ', lat, long);
-
-
+            const latlong = new this.maps.LatLng(lat, long);
 
             this.markers.push(new this.maps.Marker({
                 position: latlong,

@@ -26,9 +26,25 @@ const SpeciesModal = React.createClass({
         console.log('getting next props!');
         console.log(nextProps);
         this.setState({loading: true});
-        Meteor.setTimeout(() => {
-            this.setState({loading: false});
-        }, 2000);
+
+        const httpUrl = `${Meteor.settings.public.apiUrl}/species/${nextProps.speciesId}`;
+        console.log(httpUrl);
+
+        HTTP.call(
+            'get',
+            httpUrl,
+            (err, res) => {
+                if (err || res.statusCode !== 200) {
+                    console.error('Error getting species data');
+                    console.error(err);
+                    this.setState({loading: false, hasError: true});
+                } else {
+                    console.log('got DATA');
+                    console.log(res);
+                    this.setState({loading: false, data: res.data});
+                }
+            }
+        );
     },
 
     closeModal(evt) {
@@ -36,19 +52,44 @@ const SpeciesModal = React.createClass({
         this.$modal.modal('hide');
     },
 
+    hasSeen() {
+        return (this.data.user && this.data.user.profile && this.data.user.profile.speciesSeen && this.data.user.profile.speciesSeen.indexOf(this.props.speciesId) > -1);
+    },
+
+    markAsSeen() {
+        if (Meteor.userId()) {
+            Meteor.call('markSpeciesAsSeen', this.props.speciesId);
+        } else {
+            FlowRouter.go('/sign-in');
+        }
+    },
+
     render() {
         return (
             <div id="speciesModal" className="ui modal" ref={(ref) => this.modal = ref}>
                 <i className="close icon" onClick={(evt) => this.closeModal(evt)}></i>
                 <div className="header">
-                    Species modal
-                    <button className="ui primary left icon labeled button">
-                        <i className="eye icon"></i>
-                        Seen it!
-                    </button>
+                    {this.props.speciesName}
                 </div>
                 <div className="content">
-                    {this.state.loading ? <div className="ui active inline centered loader"></div> : this.props.speciesId}
+                    {(() => {
+                        if (this.hasSeen()) {
+                            return (
+                                <button className="ui positive fluid left icon labeled button">
+                                    <i className="eye icon"></i>
+                                    Seen it!
+                                </button>
+                            );
+                        } else  {
+                            return (
+                                <button className="ui primary fluid left icon labeled button" onClick={(evt) => this.markAsSeen(evt)}>
+                                    <i className="eye icon"></i>
+                                    Mark as seen
+                                </button>
+                            )
+                        }
+                    })()}
+                    {this.state.loading ? <div className="ui active inline centered loader"></div> : JSON.stringify(this.state.data)}
                 </div>
             </div>
         )
@@ -58,10 +99,12 @@ const SpeciesModal = React.createClass({
 export default React.createClass({
     mixins: [ReactMeteorData],
     getMeteorData() {
-        const watchingSpeciesId = Session.get('watchingSpeciesId');
-        return {watchingSpeciesId};
+        return {
+            watchingSpeciesId: Session.get('watchingSpeciesId'),
+            watchingSpeciesName: Session.get('watchingSpeciesName')
+        };
     },
     render() {
-        return <SpeciesModal speciesId={this.data.watchingSpeciesId}/>
+        return <SpeciesModal speciesId={this.data.watchingSpeciesId} speciesName={this.data.watchingSpeciesName}/>
     }
 });
