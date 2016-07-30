@@ -55,7 +55,6 @@ export default class MainView extends React.Component {
          }
          });*/
         this.setState({loading: false, animalStartingIndex: 0, allAnimals: testArr});
-        this.getCurrentAnimals();
     }
 
     viewNextAnimals(evt) {
@@ -76,7 +75,6 @@ export default class MainView extends React.Component {
         }
 
         this.setState({animalStartingIndex: newIndex});
-        this.getCurrentAnimals();
     }
 
     viewPreviousAnimals(evt) {
@@ -96,14 +94,13 @@ export default class MainView extends React.Component {
             newIndex = 0;
         }
         this.setState({animalStartingIndex: newIndex});
-        this.getCurrentAnimals();
     }
 
     getCurrentAnimals() {
         const index = this.state.animalStartingIndex,
             animals = this.state.allAnimals.slice(index, index + 4);
         console.log(animals);
-        this.setState({currentAnimals: animals});
+        return animals;
     }
 
     render() {
@@ -120,8 +117,8 @@ export default class MainView extends React.Component {
                 <div className="boxContent googleMap">
                     <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude}/>
                 </div>
-                {(this.state.currentAnimals ? <AnimalGallery
-                    animals={this.state.currentAnimals}
+                {(this.state.allAnimals ? <AnimalGallery
+                    animals={this.getCurrentAnimals()}
                     viewNext={this.viewNextAnimals.bind(this)}
                     viewPrevious={this.viewPreviousAnimals.bind(this)}
                 /> : null)}

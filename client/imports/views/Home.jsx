@@ -4,7 +4,7 @@ import MainView from './MainView';
 
 //console.log(Injected.rawHead('viewport'));
 
-class Header extends React.Component {
+export class Header extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
@@ -49,7 +49,7 @@ const LocationPermissionDenied = () => {
     )
 };
 
-export default class HomeView extends React.Component {
+export class HomeView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

@@ -22,4 +22,11 @@ less@2.7.4
 http@1.2.8
 kadira:dochead
 meteorhacks:inject-initial
+useraccounts:semantic-ui
+useraccounts:flow-routing-ck
+npm-bcrypt
 accounts-password
+accounts-facebook
+accounts-google
+service-configuration
+react-meteor-data
