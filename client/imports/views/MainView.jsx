@@ -1,32 +1,9 @@
 import React from 'react';
 
 import GoogleMap from '../components/GoogleMap';
+import AnimalGallery from '../components/AnimalGallery';
 import {animalColors} from '../helpers';
 
-const SingleAnimal = (props) => {
-    const contentStyle = {backgroundImage: "url('//placehold.it/600x600')"},
-        colorStyle = {backgroundColor: animalColors[props.colorIndex]};
-
-    return (
-        <div className="singleAnimal">
-            <div style={contentStyle} className="content"></div>
-            <div className="colorBar" style={colorStyle}></div>
-            {props.seen ? <div className="seenIcon"><i className="eye icon"></i></div> : null}
-        </div>
-    )
-};
-
-const AnimalGallery = React.createClass({
-    render() {
-        return (
-            <div id="animalGallery" className="boxFooter">
-                {this.props.animals.map((val, index) => <SingleAnimal key={index} colorIndex={index} seen={true} />)}
-                <a href="#" className="arrow left" onClick={this.props.viewPrevious}><i className="angle left icon"></i></a>
-                <a href="#" className="arrow right" onClick={this.props.viewNext}><i className="angle right icon"></i></a>
-            </div>
-        )
-    }
-});
 
 export default class MainView extends React.Component {
     constructor(props) {
@@ -44,17 +21,24 @@ export default class MainView extends React.Component {
             testArr.push(i + 1);
         }
 
-        /*HTTP.call('GET',
-         `https://ydbb6eire4.execute-api.ap-southeast-2.amazonaws.com/beta/location?latitude=${lat}&longitude=${long}`,
-         (err, res) => {
-         if (err || res.statusCode !== 200) {
-         this.setState({hasError: true});
-         } else {
-         console.log(res.data);
-         this.setState({loading: false, animalStartingIndex: 0, allAnimals: JSON.parse(res.data)})
-         }
-         });*/
-        this.setState({loading: false, animalStartingIndex: 0, allAnimals: testArr});
+        HTTP.call('GET',
+             `${Meteor.settings.public.apiUrl}/location?latitude=${lat}&longitude=${long}`,
+             (err, res) => {
+                 if (err || res.statusCode !== 200) {
+                    this.setState({hasError: true});
+                 } else {
+                     console.log(res.data);
+                     let jsonData;
+                     try {
+                         jsonData = (typeof res.data === 'string') ? JSON.parse(res.data) : res.data;
+                     } catch(e) {
+                         console.error('Error parsing response');
+                         console.error(e);
+                     }
+
+                     this.setState({loading: false, animalStartingIndex: 0, allAnimals: jsonData || []});
+                 }
+             });
     }
 
     viewNextAnimals(evt) {
@@ -115,7 +99,7 @@ export default class MainView extends React.Component {
         return (
             <div className="boxContent box">
                 <div className="boxContent googleMap">
-                    <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude}/>
+                    <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude} animals={this.getCurrentAnimals()}/>
                 </div>
                 {(this.state.allAnimals ? <AnimalGallery
                     animals={this.getCurrentAnimals()}

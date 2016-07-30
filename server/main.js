@@ -3,13 +3,12 @@ import { Meteor } from 'meteor/meteor';
 Inject.rawHead('viewport', '<meta name="viewport" content="width=device-width, initial-scale=1">');
 
 Meteor.startup(() => {
-    // login service configuration
     ServiceConfiguration.configurations.update(
-        { "service": "facebook" },
+        { service : "google" },
         {
             $set: {
-                "appId": Meteor.settings.facebook.appId,
-                "secret": Meteor.settings.facebook.appSecret
+                clientId: Meteor.settings.google.clientId,
+                secret: Meteor.settings.google.clientSecret
             }
         },
         { upsert: true }

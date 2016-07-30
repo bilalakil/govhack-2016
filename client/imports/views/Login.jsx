@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Header} from './Home';
+import Header from '../components/Header';
 
 export default class LoginView extends React.Component {
     constructor(props) {

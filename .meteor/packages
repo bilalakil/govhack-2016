@@ -26,7 +26,7 @@ useraccounts:semantic-ui
 useraccounts:flow-routing-ck
 npm-bcrypt
 accounts-password
-accounts-facebook
 accounts-google
 service-configuration
 react-meteor-data
+session
