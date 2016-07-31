@@ -111,8 +111,9 @@ const SpeciesModal = React.createClass({
     },
 
     markAsSeen() {
+        console.log(this.props)
         if (Meteor.userId()) {
-            Meteor.call('markSpeciesAsSeen', this.props.speciesId);
+            Meteor.call('markSpeciesAsSeen', this.props.speciesId, this.props.speciesName);
         } else {
             this.closeModal();
             FlowRouter.go('/sign-in');
