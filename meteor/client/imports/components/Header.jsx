@@ -24,7 +24,9 @@ export default React.createClass({
         return (
             <div className="boxHeader" id="mobileNav">
                 <div className="ui inverted menu">
-                    <a id="brandHeader" className="header item" href="/">GaiaXplorers</a>
+                    <a id="brandHeader" className="header item" href="/">
+                        <img src="/gaiaxplorers-logo.png" />
+                    </a>
                     <div id="rightNav" className="right menu">
                         <h2 className="header item">
                             <i className="sidebar icon" style={sidebarStyle} onClick={this.toggleMobileMenu} />
