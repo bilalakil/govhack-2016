@@ -7,8 +7,8 @@ const SpeciesRow = (props) => {
 
     return (
         <tr onClick={(evt)=>this.openModal(evt)}>
-            <td><img src = {props.image}/></td>
-            <td>{props.name}</td>
+            <td><img className="sighting-thumbnail" src = {props.image}/></td>
+            <td className="sighting-name">{props.name}</td>
         </tr>
     )
 };
@@ -23,7 +23,7 @@ const SightingsTable = (props) => {
             {props.sortedSpeciesList
               ? <table className="ui unstackable table">
                     <tbody>
-                        {props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species} id={species}/>)}
+                        {props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species.speciesName} image = {species.speciesImageUrl} id={species}/>)}
                     </tbody>
                 </table>
               : <p>Go sight some species!</p>
