@@ -2,6 +2,7 @@ import React from 'react';
 
 import GoogleMapsAPI from 'google-maps-api';
 const mapsapi = GoogleMapsAPI(Meteor.settings.public.googleMapsApiKey);
+const collidingMarkerShift = 0.0005;
 
 import {animalColors} from '../helpers';
 
@@ -65,8 +66,8 @@ export default class GoogleMap extends React.Component {
                         if (this.markers[i].icon.fillColor === color) {
                             return;
                         }
-                        lat = lat - 0.0005 + Math.random() * 0.0015;
-                        long = long - 0.0005 + Math.random() * 0.0015;
+                        lat = lat - collidingMarkerShift + Math.random() * collidingMarkerShift * 3;
+                        long = long - collidingMarkerShift + Math.random() * collidingMarkerShift * 3;
                         break;
                     }
                 }

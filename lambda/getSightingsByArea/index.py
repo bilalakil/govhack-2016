@@ -7,7 +7,7 @@ from zipfile import ZipFile
 from urllib import urlopen
 from StringIO import StringIO
 
-species_sighting_limit = 250
+species_sighting_limit = 50
 
 print('Loading function')
 

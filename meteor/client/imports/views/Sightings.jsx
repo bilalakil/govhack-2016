@@ -15,11 +15,15 @@ const SightingsTable = (props) => {
         <div>
             <p>
                 <strong>Species sighted: </strong> {props.speciesSeenNumber}
-            </p> <table className="ui unstackable table">
-                <tbody>
-                    {props.sortedSpeciesList? props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species} id={species}/>) : "Go sight some species!"}
-                </tbody>
-            </table>
+            </p>
+            {props.sortedSpeciesList
+              ? <table className="ui unstackable table">
+                    <tbody>
+                        {props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species} id={species}/>)}
+                    </tbody>
+                </table>
+              : <p>Go sight some species!</p>
+            }
         </div>
     )
 };

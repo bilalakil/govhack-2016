@@ -45,9 +45,9 @@ html, body, #react-root {
 }
 
 .boxFooter {
-  -ms-flex: 0 1 90px;
-  -webkit-flex: 0 1 90px;
-  flex: 0 1 90px;
+  -ms-flex: 0 1 100px;
+  -webkit-flex: 0 1 100px;
+  flex: 0 1 100px;
 }
 
 #brandHeader, #brandHeader.active, #homeHeader {
@@ -132,7 +132,7 @@ html, body, #react-root {
       font-size: 16px;
       padding-left: 3px;
       padding-bottom: 3px;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.65);
     }
 
     p {
@@ -168,6 +168,13 @@ html, body, #react-root {
       right: 0;
     }
   }
+}
+
+.ui.inline.loader {
+  /* `!important` because Semantic UI was overriding it for some reason,
+    which doesn't make much sense 'cos this is the override file... */
+  margin-top: 1em!important;
+  margin-bottom: 1em!important;
 }
 
 #speciesModal {
