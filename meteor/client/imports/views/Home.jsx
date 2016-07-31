@@ -13,7 +13,7 @@ const LocationPermissionDenied = () => {
     )
 };
 
-export class HomeView extends React.Component {
+export default class HomeView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

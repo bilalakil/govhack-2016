@@ -48,6 +48,7 @@ export default React.createClass({
                                 )
                             }
                         })()}
+                        <a href="/leaderboard" className="item">Leaderboard</a>
                     </div>
                 </div>
             </div>
