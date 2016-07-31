@@ -23,6 +23,7 @@ module.exports = {
             port: 443
         },
         dockerImage: 'christiankiely/meteord:base',
+        sslDockerImage: 'christiankiely/mup-frontend-server:latest',
         deployCheckWaitTime: 60,
         enableUploadProgressBar: true
     },
