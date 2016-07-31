@@ -15,7 +15,6 @@ export default class GoogleMap extends React.Component {
     componentDidMount() {
         mapsapi().then((maps) => {
             const latlong = new maps.LatLng(this.props.lat, this.props.long);
-
             this.maps = maps;
             this.markers = [];
 
@@ -31,8 +30,7 @@ export default class GoogleMap extends React.Component {
                 navigationControl: false,
                 streetViewControl: false
             });
-
-            this.setAnimalMarkers(this.props);
+            //this.setAnimalMarkers(this.props);
         });
     }
 
@@ -41,15 +39,18 @@ export default class GoogleMap extends React.Component {
     }
 
     deleteMarkers() {
-        console.log(this.markers);
-        for (var i = 0; i < this.markers.length; i++) {
-            this.markers[i].setMap(null);
+        if (this.markers) {
+            for (var i = 0; i < this.markers.length; i++) {
+                this.markers[i].setMap(null);
+            }
+            this.markers = [];
         }
-        this.markers = [];
     }
 
     setAnimalMarkers(props) {
         console.log(props.animals);
+        if (!props.animals || props.animals.length === 0) return;
+
         const animalIds = props.animals.map((animal) => animal.speciesId),
             lat = this.props.lat,
             long = this.props.long;
@@ -58,11 +59,16 @@ export default class GoogleMap extends React.Component {
             lat = parseFloat(lat);
             long = parseFloat(long);
 
-            for (let i = 0; i < this.markers.length; i++) {
-                if (this.markers[i].position.lat() === lat && this.markers[i].position.lng() === long) {
-                    console.log('collision');
-                    lat = lat - 0.0005 + Math.random() * 0.0015;
-                    long = long - 0.0005 + Math.random() * 0.0015;
+            if (this.markers) {
+                for (let i = 0; i < this.markers.length; i++) {
+                    if (this.markers[i].position.lat() === lat && this.markers[i].position.lng() === long) {
+                        if (this.markers[i].icon.fillColor === color) {
+                            return;
+                        }
+                        lat = lat - 0.0005 + Math.random() * 0.0015;
+                        long = long - 0.0005 + Math.random() * 0.0015;
+                        break;
+                    }
                 }
             }
 
@@ -81,8 +87,7 @@ export default class GoogleMap extends React.Component {
             }));
         };
 
-        const httpUrl = `${Meteor.settings.public.apiUrl}/sightings?latitude=${lat}&longitude=${long}&radius=2.0&species_ids=${animalIds.map((v) => encodeURIComponent(v)).join(',')}`;
-        console.log(httpUrl);
+        const httpUrl = `${Meteor.settings.public.apiUrl}/sightings?latitude=${lat}&longitude=${long}&radius=1.0&species_ids=${animalIds.map((v) => encodeURIComponent(v)).join(',')}`;
 
         this.deleteMarkers();
 
@@ -95,7 +100,7 @@ export default class GoogleMap extends React.Component {
                     console.error(err);
                 } else {
                     const data = res.data;
-                    console.log('GOT DATAAAA');
+                    console.log('GOT location data');
                     console.log(data);
 
                     animalIds.map((animalId, index) => {

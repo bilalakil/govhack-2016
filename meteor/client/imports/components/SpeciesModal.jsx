@@ -25,30 +25,32 @@ const SpeciesModal = React.createClass({
     componentWillReceiveProps(nextProps) {
         console.log('getting next props!');
         console.log(nextProps);
-        this.setState({loading: true});
+        if (nextProps.speciesId) {
+            this.setState({loading: true});
 
-        const httpUrl = `${Meteor.settings.public.apiUrl}/species/${nextProps.speciesId}`;
-        console.log(httpUrl);
+            const httpUrl = `${Meteor.settings.public.apiUrl}/species/${nextProps.speciesId}`;
+            console.log(httpUrl);
 
-        HTTP.call(
-            'get',
-            httpUrl,
-            (err, res) => {
-                if (err || res.statusCode !== 200) {
-                    console.error('Error getting species data');
-                    console.error(err);
-                    this.setState({loading: false, hasError: true});
-                } else {
-                    console.log('got DATA');
-                    console.log(res);
-                    this.setState({loading: false, data: res.data});
+            HTTP.call(
+                'get',
+                httpUrl,
+                (err, res) => {
+                    if (err || res.statusCode !== 200) {
+                        console.error('Error getting species data');
+                        console.error(err);
+                        this.setState({loading: false, hasError: true});
+                    } else {
+                        console.log('got DATA');
+                        console.log(res);
+                        this.setState({loading: false, data: res.data});
+                    }
                 }
-            }
-        );
+            );
+        }
     },
 
     closeModal(evt) {
-        evt.preventDefault();
+        if (evt) evt.preventDefault();
         this.$modal.modal('hide');
     },
 
@@ -60,6 +62,7 @@ const SpeciesModal = React.createClass({
         if (Meteor.userId()) {
             Meteor.call('markSpeciesAsSeen', this.props.speciesId);
         } else {
+            this.closeModal();
             FlowRouter.go('/sign-in');
         }
     },

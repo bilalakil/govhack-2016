@@ -2,13 +2,13 @@ import React from 'react';
 
 import GoogleMap from '../components/GoogleMap';
 import AnimalGallery from '../components/AnimalGallery';
-import {animalColors} from '../helpers';
 
 
 export default class MainView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {loading: true};
+        this.getCurrentAnimals = this.getCurrentAnimals.bind(this);
     }
 
     componentWillMount() {
@@ -37,6 +37,7 @@ export default class MainView extends React.Component {
                      }
 
                      this.setState({loading: false, animalStartingIndex: 0, allAnimals: jsonData || []});
+                     this.getCurrentAnimals(0, jsonData);
                  }
              });
     }
@@ -59,6 +60,7 @@ export default class MainView extends React.Component {
         }
 
         this.setState({animalStartingIndex: newIndex});
+        this.getCurrentAnimals(newIndex);
     }
 
     viewPreviousAnimals(evt) {
@@ -77,14 +79,16 @@ export default class MainView extends React.Component {
         } else if (newIndex < 0) {
             newIndex = 0;
         }
+
         this.setState({animalStartingIndex: newIndex});
+        this.getCurrentAnimals(newIndex);
     }
 
-    getCurrentAnimals() {
-        const index = this.state.animalStartingIndex,
-            animals = this.state.allAnimals.slice(index, index + 4);
+    getCurrentAnimals(newIndex, allAnimals) {
+        if (!allAnimals) allAnimals = this.state.allAnimals;
+        const animals = allAnimals.slice(newIndex, newIndex + 4);
         console.log(animals);
-        return animals;
+        this.setState({currentAnimals: animals});
     }
 
     render() {
@@ -98,11 +102,12 @@ export default class MainView extends React.Component {
 
         return (
             <div className="boxContent box">
-                <div className="boxContent googleMap">
-                    <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude} animals={this.getCurrentAnimals()}/>
+                <div className="boxContent" id="googleMap">
+                    <GoogleMap lat={this.props.coords.latitude} long={this.props.coords.longitude} animals={this.state.currentAnimals}/>
+                    <a href="#" id="resetLocationIcon" onClick={(evt) => {this.props.requestCurrentLocation(evt)}}><i className="marker icon"></i></a>
                 </div>
-                {(this.state.allAnimals ? <AnimalGallery
-                    animals={this.getCurrentAnimals()}
+                {(this.state.currentAnimals ? <AnimalGallery
+                    animals={this.state.currentAnimals}
                     viewNext={this.viewNextAnimals.bind(this)}
                     viewPrevious={this.viewPreviousAnimals.bind(this)}
                 /> : null)}

@@ -21,9 +21,17 @@ export class HomeView extends React.Component {
             locationPermissionDenied: false,
             coords: null
         };
+        this.requestCurrentLocation = this.requestCurrentLocation.bind(this);
     }
 
     componentWillMount() {
+        this.requestCurrentLocation();
+    }
+
+    requestCurrentLocation(evt) {
+        if (evt) evt.preventDefault();
+        this.setState({requestingLocationPermission: true});
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 console.log(position);
@@ -47,7 +55,7 @@ export class HomeView extends React.Component {
                     <Header />
                     {this.state.requestingLocationPermission ? <div className="ui active loader"></div> : null}
                     {this.state.locationPermissionDenied ? <LocationPermissionDenied /> : null}
-                    {this.state.coords ? <MainView coords={this.state.coords} /> : null}
+                    {this.state.coords ? <MainView coords={this.state.coords} requestCurrentLocation={this.requestCurrentLocation} /> : null}
                 </div>
                 <SpeciesModalContainer/>
             </div>
