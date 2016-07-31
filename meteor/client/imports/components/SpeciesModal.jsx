@@ -107,7 +107,18 @@ const SpeciesModal = React.createClass({
     },
 
     hasSeen() {
-        return (this.data.user && this.data.user.profile && this.data.user.profile.speciesSeen && this.data.user.profile.speciesSeen.indexOf(this.props.speciesId) > -1);
+        if(!(this.data.user && this.data.user.profile && this.data.user.profile.speciesSeen)) return false;
+        
+        let speciesIdFound = false;
+
+        for(let species of this.data.user.profile.speciesSeen) {
+            if(species.speciesId === this.props.speciesId) {
+                speciesIdFound = true;
+                break;
+            }
+        }
+
+        return speciesIdFound;
     },
 
     markAsSeen() {

@@ -71,7 +71,18 @@ export default React.createClass({
         return data;
     },
     isSeen(speciesId) {
-        return (this.data.speciesSeen && this.data.speciesSeen.indexOf(speciesId) > -1);
+        if(!this.data.speciesSeen) return false;
+        
+        let speciesIdFound = false;
+
+        for(let species of this.data.speciesSeen) {
+            if(species.speciesId === speciesId) {
+                speciesIdFound = true;
+                break;
+            }
+        }
+
+        return speciesIdFound;
     },
     render() {
         if (!this.props.animals || this.props.animals.length === 0) {
