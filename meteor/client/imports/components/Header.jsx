@@ -50,7 +50,7 @@ export default React.createClass({
                                 )
                             }
                         })()}
-                        <a href="/sightings" className="item">Sightings</a>
+                        {this.data.loggedIn ? <a href="/sightings" className="item">Sightings</a> : ""}
                         <a href="/leaderboard" className="item">Leaderboard</a>
                     </div>
                 </div>
