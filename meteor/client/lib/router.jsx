@@ -3,6 +3,7 @@ import {mount} from 'react-mounter';
 
 import HomeView from '../imports/views/Home';
 import Leaderboard from '../imports/views/Leaderboard';
+import Sightings from '../imports/views/Sightings';
 
 FlowRouter.route('/', {
     name: 'home',
@@ -15,6 +16,13 @@ FlowRouter.route('/leaderboard', {
     name: 'leaderboard',
     action: function() {
         mount(Leaderboard);
+    }
+});
+
+FlowRouter.route('/sightings', {
+    name: 'sightings',
+    action: function() {
+        mount(Sightings);
     }
 });
 
