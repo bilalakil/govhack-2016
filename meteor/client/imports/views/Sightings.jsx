@@ -11,14 +11,13 @@ const SpeciesRow = (props) => {
 };
 
 const SightingsTable = (props) => {
-    console.log(props)
     return (
         <div>
             <p>
                 <strong>Species sighted: </strong> {props.speciesSeenNumber}
             </p> <table className="ui unstackable table">
                 <tbody>
-                    {props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species} id={species}/>)}
+                    {props.sortedSpeciesList? props.sortedSpeciesList.map((species, index) => <SpeciesRow key={index} name={species} id={species}/>) : "Go sight some species!"}
                 </tbody>
             </table>
         </div>
@@ -36,15 +35,15 @@ export default React.createClass({
     },
 
     sortedSpeciesList() {
-        return this.data.user.profile.speciesName;
+        return (this.data.user.profile ? this.data.user.profile.speciesName : 0);
     },
 
     speciesSeenNumber() {
-        return this.data.user.profile.speciesSeenNumber;
+        return (this.data.user.profile ? this.data.user.profile.speciesSeenNumber : 0);
     },
 
     render() {
-        console.log(this.data)
+        
         return (
             <div style={{height: '100%'}}>
                 <div className="box fullSize">
