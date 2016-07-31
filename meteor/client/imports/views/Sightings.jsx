@@ -11,6 +11,7 @@ const SpeciesRow = (props) => {
 };
 
 const SightingsTable = (props) => {
+    console.log(props)
     return (
         <div>
             <p>
@@ -35,7 +36,7 @@ export default React.createClass({
     },
 
     sortedSpeciesList() {
-        return this.data.user.profile.speciesSeen;
+        return this.data.user.profile.speciesName;
     },
 
     speciesSeenNumber() {
@@ -43,6 +44,7 @@ export default React.createClass({
     },
 
     render() {
+        console.log(this.data)
         return (
             <div style={{height: '100%'}}>
                 <div className="box fullSize">
