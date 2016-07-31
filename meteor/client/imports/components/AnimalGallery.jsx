@@ -39,6 +39,7 @@ class SingleAnimal extends React.Component {
         evt.preventDefault();
         Session.set('watchingSpeciesId', this.props.speciesId);
         Session.set('watchingSpeciesName', this.props.name);
+        Session.set('watchingSpeciesImageUrl', this.state.imageUrl);
         $('#speciesModal').modal('show');
     }
 

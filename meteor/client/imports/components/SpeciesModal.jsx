@@ -1,5 +1,57 @@
 import React from 'react';
 
+const descriptionItemBlacklist = [
+    //'Brief description'
+];
+
+const DescriptionItem = (props) => {
+    return (
+        <div className="ui basic segment">
+            <h3 className="ui header">{props.section}</h3>
+            <p>{props.content}</p>
+        </div>
+    );
+};
+
+class SpeciesModalInner extends React.Component {
+    constructor(props) {
+        super(props);
+        this.whitelistedContent = this.whitelistedContent.bind(this);
+    }
+
+    componentDidMount() {
+        $(this.tabMenu).find('.item').tab({
+            onVisible() {
+                $('#speciesModal').modal('refresh');
+            }
+        });
+    }
+
+    whitelistedContent() {
+        return this.props.content.filter((item) => {
+            return (descriptionItemBlacklist.indexOf(item.section) === -1);
+        });
+    }
+
+    render() {
+        console.log(this.props);
+        return (
+            <div className="content">
+                <div className="ui tabular menu" ref={(ref) => this.tabMenu = ref}>
+                    <div className="active item" data-tab="gallery">Gallery</div>
+                    <div className="item" data-tab="details">Details</div>
+                </div>
+                <div className="ui active tab" data-tab="gallery">
+                    <div className="speciesImage" style={{backgroundImage: `url('${this.props.imageUrl}')`}}></div>
+                </div>
+                <div className="ui tab" data-tab="details">
+                    {this.whitelistedContent().map((item, index) => <DescriptionItem key={index} {...item}/>)}
+                </div>
+            </div>
+        );
+    }
+}
+
 const SpeciesModal = React.createClass({
     mixins: [ReactMeteorData],
 
@@ -69,11 +121,12 @@ const SpeciesModal = React.createClass({
 
     render() {
         return (
-            <div id="speciesModal" className="ui modal" ref={(ref) => this.modal = ref}>
+            <div id="speciesModal" className="ui long modal" ref={(ref) => this.modal = ref}>
                 <i className="close icon" onClick={(evt) => this.closeModal(evt)}></i>
                 <div className="header">
                     {this.props.speciesName}
                 </div>
+                {this.state.loading ? <div className="ui active inline centered loader"></div> : <SpeciesModalInner imageUrl={this.props.speciesImageUrl} {...this.state.data} /> }
                 <div className="content">
                     {(() => {
                         if (this.hasSeen()) {
@@ -92,7 +145,6 @@ const SpeciesModal = React.createClass({
                             )
                         }
                     })()}
-                    {this.state.loading ? <div className="ui active inline centered loader"></div> : JSON.stringify(this.state.data)}
                 </div>
             </div>
         )
@@ -103,11 +155,13 @@ export default React.createClass({
     mixins: [ReactMeteorData],
     getMeteorData() {
         return {
-            watchingSpeciesId: Session.get('watchingSpeciesId'),
-            watchingSpeciesName: Session.get('watchingSpeciesName')
+            speciesId: Session.get('watchingSpeciesId'),
+            speciesName: Session.get('watchingSpeciesName'),
+            speciesImageUrl: Session.get('watchingSpeciesImageUrl')
+
         };
     },
     render() {
-        return <SpeciesModal speciesId={this.data.watchingSpeciesId} speciesName={this.data.watchingSpeciesName}/>
+        return <SpeciesModal {...this.data}/>
     }
 });
