@@ -7,6 +7,8 @@ from zipfile import ZipFile
 from urllib import urlopen
 from StringIO import StringIO
 
+species_sighting_limit = 250
+
 print('Loading function')
 
 def lambda_handler(event, context):
@@ -28,7 +30,7 @@ def construct_request_uri(latitude, longitude, radius, species_ids):
     misc_opts_querystring = get_misc_opts_querystring()
     return_fields_querystring = get_return_fields_querystring()
     
-    # Combinefor the final request string
+    # Combine for the final request string
     request_params = species_querystring + "&" + position_querystring + "&" + csv_opts_querystring + "&" + misc_opts_querystring + "&" + return_fields_querystring
     return BASE_URI + request_params
 
@@ -51,10 +53,12 @@ def get_sightings_from_atlas(uri, species_ids):
     # Skip the header row using [1:]
     for line in zipfile.open("data.csv").readlines()[1:]:
         sighting_record = line.split(",")
-        # Slice off the CSV formatting around the real data using [1:-2] etc.. filthy line clean up if time permits
         sightings[sighting_record[LSID][1:-2]].append([sighting_record[LAT][1:-1],sighting_record[LONG][1:-1]])
         
     for species_id in species_ids:
+        # Don't return too many sightings for a single species
+        sightings[species_id] = sightings[species_id][0:species_sighting_limit]
+        # Prune any empty entries
         if sightings[species_id] == []: del sightings[species_id]
         
     return sightings
