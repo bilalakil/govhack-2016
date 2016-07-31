@@ -1,15 +1,22 @@
 import React from 'react';
 
-export default class Header extends React.Component {
-    constructor(props) {
-        super(props);
-        this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
-    }
-
+export default React.createClass({
+    mixins: [ReactMeteorData],
+    getMeteorData() {
+        return {
+            loggedIn: (Meteor.userId())
+        }
+    },
     toggleMobileMenu(evt) {
-        evt.preventDefault();
+        if (evt) evt.preventDefault();
         $(this.slideMenu).transition('slide down');
-    }
+    },
+
+    signOut(evt) {
+        evt.preventDefault();
+        this.toggleMobileMenu();
+        Meteor.logout();
+    },
 
     render() {
         const sidebarStyle = {marginRight: 0};
@@ -17,7 +24,7 @@ export default class Header extends React.Component {
         return (
             <div className="boxHeader" id="mobileNav">
                 <div className="ui inverted menu">
-                    <div id="brandHeader" className="header item">GaiaXplorers</div>
+                    <a id="brandHeader" className="header item" href="/">GaiaXplorers</a>
                     <div id="rightNav" className="right menu">
                         <h2 className="header item">
                             <i className="sidebar icon" style={sidebarStyle} onClick={this.toggleMobileMenu} />
@@ -26,13 +33,24 @@ export default class Header extends React.Component {
                 </div>
                 <div className="slideMenu" ref={(ref) => this.slideMenu = ref}>
                     <div className="ui inverted stackable menu">
-                        <a href="#" className="item">
-                            <i className="check icon" />
-                            <span>Test</span>
-                        </a>
+                        {(() => {
+                            if (!this.data.loggedIn) {
+                                return (
+                                    <a href="/sign-in" className="item">
+                                        Sign in
+                                    </a>
+                                )
+                            } else {
+                                return (
+                                    <a href="#" className="item" onClick={(evt) => this.signOut(evt)}>
+                                        Sign out
+                                    </a>
+                                )
+                            }
+                        })()}
                     </div>
                 </div>
             </div>
         );
     }
-}
+});
