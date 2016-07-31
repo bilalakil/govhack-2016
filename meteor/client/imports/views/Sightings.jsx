@@ -3,8 +3,11 @@ import React from 'react';
 import Header from '../components/Header';
 
 const SpeciesRow = (props) => {
+
+
     return (
-        <tr>
+        <tr onClick={(evt)=>this.openModal(evt)}>
+            <td><img src = {props.image}/></td>
             <td>{props.name}</td>
         </tr>
     )
@@ -15,6 +18,7 @@ const SightingsTable = (props) => {
         <div>
             <p>
                 <strong>Species sighted: </strong> {props.speciesSeenNumber}
+
             </p>
             {props.sortedSpeciesList
               ? <table className="ui unstackable table">
@@ -24,6 +28,7 @@ const SightingsTable = (props) => {
                 </table>
               : <p>Go sight some species!</p>
             }
+
         </div>
     )
 };
@@ -38,8 +43,12 @@ export default React.createClass({
         }
     },
 
+    openModal(){
+        console.log('species')
+    },
+
     sortedSpeciesList() {
-        return (this.data.user.profile ? this.data.user.profile.speciesName : 0);
+        return (this.data.user.profile ? this.data.user.profile.speciesSeen : 0);
     },
 
     speciesSeenNumber() {
@@ -47,7 +56,7 @@ export default React.createClass({
     },
 
     render() {
-        
+        console.log(this.data.user)
         return (
             <div style={{height: '100%'}}>
                 <div className="box fullSize">
