@@ -2,7 +2,7 @@ module.exports = {
     servers: {
         one: {
             host: "gaiaxplorers.net",
-            username: "root",
+            username: "ubuntu",
             pem: '/home/christian/.ssh/id_rsa'
         }
     },
@@ -14,7 +14,7 @@ module.exports = {
             one: {}
         },
         env: {
-            ROOT_URL: 'http://54.206.37.41',
+            ROOT_URL: 'https://gaiaxplorers.net',
             MONGO_URL: 'mongodb://localhost/meteor'
         },
         ssl: {
